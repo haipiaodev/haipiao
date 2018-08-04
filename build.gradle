@@ -8,8 +8,14 @@ subprojects {
     apply plugin: 'java'
 
     repositories {
-        mavenCentral()
-    } 
+        jcenter()
+    }
+
+    sourceSets {
+        test {
+            java.srcDirs = ['src/test/java/unit']
+        }
+    }
 
     test {
         testLogging.events "PASSED", "FAILED", "SKIPPED"
@@ -19,6 +25,10 @@ subprojects {
     dependencies {
         compile 'com.google.guava:guava:22.0'
         compile 'org.projectlombok:lombok:1.18.0'
+        compile 'org.springframework.boot:spring-boot-starter-jersey:2.0.4.RELEASE'
+        compile 'org.springframework.boot:spring-boot-starter-actuator:2.0.4.RELEASE'
+        compile 'org.springframework.boot:spring-boot-starter-tomcat:2.0.4.RELEASE'
+        testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.4.RELEASE'
         testCompile 'junit:junit:4.12'
     }
 

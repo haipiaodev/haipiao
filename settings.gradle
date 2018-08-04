@@ -19,3 +19,5 @@ rootProject.name = 'haipiao'
 
 include 'haipiao-demo'
 include 'haipiao-entities'
+include 'haipiao-framework'
+include 'haipiao-user-service'
