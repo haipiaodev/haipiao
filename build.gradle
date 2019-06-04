@@ -9,6 +9,7 @@ buildscript {
 
 plugins {
     id 'com.palantir.docker' version '0.22.1'
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
 }
 
 allprojects {
@@ -20,8 +21,6 @@ allprojects {
         dockerfile project.file('./schemas/Dockerfile')
         files './schemas/haipiao_schema_v1.sql'
     }
-
-
 }
 
 subprojects {
@@ -30,6 +29,12 @@ subprojects {
 
     repositories {
         mavenCentral()
+    }
+
+    sourceSets {
+        test {
+            java.srcDirs = ['src/test/java/unit']
+        }
     }
 
     test {
@@ -43,7 +48,12 @@ subprojects {
         compile 'com.google.guava:guava:22.0'
         compile 'org.hibernate:hibernate-core:5.4.2.Final'
         compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.1.RELEASE'
+        compile 'org.springframework.boot:spring-boot-starter-web:2.1.1.RELEASE'
+        compile 'org.springframework.boot:spring-boot-configuration-processor:2.1.1.RELEASE'
         compile 'org.postgresql:postgresql:42.2.5'
+        compile 'com.google.code.gson:gson:2.8.5'
+        compile 'io.lettuce:lettuce-core:5.1.6.RELEASE'
+        compile 'org.apache.commons:commons-lang3:3.0'
         testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.1.RELEASE'
     }
 }
