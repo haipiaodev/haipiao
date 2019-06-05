@@ -32,8 +32,14 @@ subprojects {
     }
 
     sourceSets {
+        main {
+            resources.srcDirs = ['src/main/java/resources']
+            output.resourcesDir = 'build/classes/java/main/resources'
+        }
         test {
             java.srcDirs = ['src/test/java/unit']
+            resources.srcDirs = ['src/test/java/unit/resources']
+            output.resourcesDir = 'build/classes/java/test/resources'
         }
     }
 
