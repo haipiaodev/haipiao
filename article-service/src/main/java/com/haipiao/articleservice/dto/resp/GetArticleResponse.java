@@ -3,40 +3,11 @@ package com.haipiao.articleservice.dto.resp;
 import com.google.gson.annotations.SerializedName;
 import com.haipiao.articleservice.dto.common.Tag;
 import com.haipiao.articleservice.dto.common.Topic;
+import com.haipiao.common.resp.AbstractResponse;
 
-public class GetArticleResponse {
-    @SerializedName("success")
-    private Boolean success;
-    @SerializedName("error")
-    private String error;
-    @SerializedName("data")
-    private Data data;
+public class GetArticleResponse extends AbstractResponse<GetArticleResponse.ArticleData> {
 
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
-    }
-
-    public static class Data {
+    public static class ArticleData {
         @SerializedName("id")
         private int id;
 

@@ -1,8 +1,9 @@
 package com.haipiao.userservice.req;
 
 import com.google.gson.annotations.SerializedName;
+import com.haipiao.common.req.AbstractRequest;
 
-public class CreateUserRequest {
+public class CreateUserRequest extends AbstractRequest {
     @SerializedName("name")
     private String name;
     @SerializedName("gender")

@@ -6,7 +6,8 @@ public enum ErrorCode {
     UNAUTHORIZED("unauthorized request"),
     FORBIDDEN("forbidden"),
     INTERNAL_SERVER_ERROR("internal server error"),
-    THROTTLED("request throttled");
+    THROTTLED("request throttled"),
+    NOT_FOUND("entity requested not found");
 
     ErrorCode(String defaultMessage) {
         this.defaultMessage = defaultMessage;

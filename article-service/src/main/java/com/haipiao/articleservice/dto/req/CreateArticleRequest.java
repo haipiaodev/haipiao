@@ -3,8 +3,9 @@ package com.haipiao.articleservice.dto.req;
 import com.google.gson.annotations.SerializedName;
 import com.haipiao.articleservice.dto.common.Tag;
 import com.haipiao.articleservice.dto.common.Topic;
+import com.haipiao.common.req.AbstractRequest;
 
-public class CreateArticleRequest {
+public class CreateArticleRequest extends AbstractRequest {
     @SerializedName("title")
     private String titile;
 

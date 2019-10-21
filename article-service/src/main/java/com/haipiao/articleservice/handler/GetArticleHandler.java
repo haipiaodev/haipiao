@@ -2,9 +2,22 @@ package com.haipiao.articleservice.handler;
 
 import com.haipiao.articleservice.dto.req.GetArticleRequest;
 import com.haipiao.articleservice.dto.resp.GetArticleResponse;
+import com.haipiao.common.ErrorInfo;
+import com.haipiao.common.enums.ErrorCode;
 import com.haipiao.common.handler.AbstractHandler;
-import com.haipiao.persist.entity.*;
-import com.haipiao.persist.repository.*;
+import com.haipiao.common.service.SessionService;
+import com.haipiao.persist.entity.Article;
+import com.haipiao.persist.entity.ArticleTopic;
+import com.haipiao.persist.entity.Image;
+import com.haipiao.persist.entity.Tag;
+import com.haipiao.persist.entity.Topic;
+import com.haipiao.persist.entity.User;
+import com.haipiao.persist.repository.ArticleRepository;
+import com.haipiao.persist.repository.ArticleTopicRepository;
+import com.haipiao.persist.repository.ImageRepository;
+import com.haipiao.persist.repository.TagRepository;
+import com.haipiao.persist.repository.TopicRepository;
+import com.haipiao.persist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -31,12 +44,14 @@ public class GetArticleHandler extends AbstractHandler<GetArticleRequest, GetArt
     private TagRepository tagRepository;
 
     public GetArticleHandler(
-            ArticleRepository articleRepository,
-            UserRepository userRepository,
-            TopicRepository topicRepository,
-            ArticleTopicRepository articleTopicRepository,
-            ImageRepository imageRepository,
-            TagRepository tagRepository){
+        SessionService sessionService,
+        ArticleRepository articleRepository,
+        UserRepository userRepository,
+        TopicRepository topicRepository,
+        ArticleTopicRepository articleTopicRepository,
+        ImageRepository imageRepository,
+        TagRepository tagRepository) {
+        super(sessionService);
         this.articleRepository = articleRepository;
         this.userRepository = userRepository;
         this.topicRepository = topicRepository;
@@ -46,9 +61,9 @@ public class GetArticleHandler extends AbstractHandler<GetArticleRequest, GetArt
     }
 
     @Override
-    public GetArticleResponse handle(GetArticleRequest req) {
+    public GetArticleResponse execute(GetArticleRequest req) {
         GetArticleResponse resp = new GetArticleResponse();
-        GetArticleResponse.Data data = new GetArticleResponse.Data();
+        GetArticleResponse.ArticleData data = new GetArticleResponse.ArticleData();
         Article article;
         int articleID = req.getId();
         Optional<Article> optionalArticle = articleRepository.findById(articleID);
@@ -56,7 +71,7 @@ public class GetArticleHandler extends AbstractHandler<GetArticleRequest, GetArt
             article = optionalArticle.get();
         } else {
             resp.setSuccess(false);
-            resp.setError(String.format("article %s not found in DB", articleID));
+            resp.setErrorInfo(new ErrorInfo(ErrorCode.NOT_FOUND, String.format("article %s not found in DB", articleID)));
             return resp;
         }
 
@@ -75,10 +90,10 @@ public class GetArticleHandler extends AbstractHandler<GetArticleRequest, GetArt
             user = optionalUser.get();
         } else {
             resp.setSuccess(false);
-            resp.setError(String.format("user %s not found in DB", authorID));
+            resp.setErrorInfo(new ErrorInfo(ErrorCode.NOT_FOUND, String.format("user %s not found in DB", authorID)));
             return resp;
         }
-        GetArticleResponse.Data.Author author = new GetArticleResponse.Data.Author();
+        GetArticleResponse.ArticleData.Author author = new GetArticleResponse.ArticleData.Author();
         author.setId(user.getUserId());
         author.setName(user.getUserName());
         author.setProfileImageUrl(user.getProfileImgUrl());
@@ -100,7 +115,7 @@ public class GetArticleHandler extends AbstractHandler<GetArticleRequest, GetArt
                 topic = optionalTopic.get();
             } else {
                 resp.setSuccess(false);
-                resp.setError(String.format("topic %s not found in DB", topicID));
+                resp.setErrorInfo(new ErrorInfo(ErrorCode.NOT_FOUND, String.format("topic %s not found in DB", topicID)));
                 return resp;
             }
             topics[i].setName(topic.getTopicName());
@@ -111,10 +126,10 @@ public class GetArticleHandler extends AbstractHandler<GetArticleRequest, GetArt
             List<Image> imageList = imageRepository.findByArticleIdOrderByPositionIdxAsc(articleID);
             Image[] imageArray = new Image[imageList.size()];
             imageArray = imageList.toArray(imageArray);
-            GetArticleResponse.Data.Image[] images = new GetArticleResponse.Data.Image[imageArray.length];
+            GetArticleResponse.ArticleData.Image[] images = new GetArticleResponse.ArticleData.Image[imageArray.length];
             for (int i = 0; i < imageArray.length; i++) {
                 int positionId = imageArray[i].getPositionIdx();
-                images[positionId] = new GetArticleResponse.Data.Image();
+                images[positionId] = new GetArticleResponse.ArticleData.Image();
                 images[positionId].setUrl(imageArray[i].getExternalUrl());
                 images[positionId].setUrlSmall(imageArray[i].getExternalUrlSmall());
                 List<Tag> tagList = tagRepository.findAllByImageId(imageArray[i].getImageId());

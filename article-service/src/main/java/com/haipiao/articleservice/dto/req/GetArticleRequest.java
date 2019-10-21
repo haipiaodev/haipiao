@@ -1,6 +1,8 @@
 package com.haipiao.articleservice.dto.req;
 
-public class GetArticleRequest {
+import com.haipiao.common.req.AbstractRequest;
+
+public class GetArticleRequest extends AbstractRequest {
     private int id;
 
     public int getId() {

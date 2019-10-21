@@ -1,27 +1,31 @@
 package com.haipiao.userservice.handler;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.haipiao.persist.entity.User;
+import com.haipiao.common.ErrorInfo;
+import com.haipiao.common.enums.ErrorCode;
 import com.haipiao.common.handler.AbstractHandler;
+import com.haipiao.common.service.SessionService;
+import com.haipiao.persist.entity.User;
 import com.haipiao.persist.repository.UserRepository;
 import com.haipiao.userservice.req.GetUserRequest;
 import com.haipiao.userservice.resp.GetUserResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class GetUserHandler extends AbstractHandler<GetUserRequest, GetUserResponse>  {
     @Autowired
     private final UserRepository userRepository;
 
-    public GetUserHandler(UserRepository userRepository) {
+    public GetUserHandler(SessionService sessionService,
+                          UserRepository userRepository) {
+        super(sessionService);
         this.userRepository = userRepository;
     }
 
     @Override
-    public GetUserResponse handle(GetUserRequest req) {
+    public GetUserResponse execute(GetUserRequest req) {
         GetUserResponse resp = new GetUserResponse();
         GetUserResponse.Data data = new GetUserResponse.Data();
 
@@ -32,7 +36,7 @@ public class GetUserHandler extends AbstractHandler<GetUserRequest, GetUserRespo
             user = optionalUser.get();
         } else {
             resp.setSuccess(false);
-            resp.setError(String.format("user %s not found in DB", userID));
+            resp.setErrorInfo(new ErrorInfo(ErrorCode.NOT_FOUND, String.format("user %s not found in DB", userID)));
             return resp;
         }
 

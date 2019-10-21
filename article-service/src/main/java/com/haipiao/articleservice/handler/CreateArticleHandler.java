@@ -3,9 +3,18 @@ package com.haipiao.articleservice.handler;
 import com.haipiao.articleservice.dto.req.CreateArticleRequest;
 import com.haipiao.articleservice.dto.resp.CreateArticleResponse;
 import com.haipiao.common.handler.AbstractHandler;
-import com.haipiao.persist.entity.*;
+import com.haipiao.common.service.SessionService;
+import com.haipiao.persist.entity.Article;
+import com.haipiao.persist.entity.ArticleTopic;
+import com.haipiao.persist.entity.Image;
+import com.haipiao.persist.entity.Tag;
+import com.haipiao.persist.entity.Topic;
 import com.haipiao.persist.enums.ImageStatus;
-import com.haipiao.persist.repository.*;
+import com.haipiao.persist.repository.ArticleRepository;
+import com.haipiao.persist.repository.ArticleTopicRepository;
+import com.haipiao.persist.repository.ImageRepository;
+import com.haipiao.persist.repository.TagRepository;
+import com.haipiao.persist.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
@@ -28,11 +37,13 @@ public class CreateArticleHandler extends AbstractHandler<CreateArticleRequest, 
     private ArticleTopicRepository articleTopicRepository;
 
     public CreateArticleHandler(
+            SessionService sessionService,
             ArticleRepository articleRepository,
             TopicRepository topicRepository,
             ArticleTopicRepository articleTopicRepository,
             ImageRepository imageRepository,
             TagRepository tagRepository){
+        super(sessionService);
         this.articleRepository = articleRepository;
         this.topicRepository = topicRepository;
         this.articleTopicRepository = articleTopicRepository;
@@ -41,7 +52,7 @@ public class CreateArticleHandler extends AbstractHandler<CreateArticleRequest, 
     }
 
     @Override
-    public CreateArticleResponse handle(CreateArticleRequest req) {
+    public CreateArticleResponse execute(CreateArticleRequest req) {
         Article article = new Article();
         article.setTitle(req.getTitile());
         article.setTextBody(req.getText());

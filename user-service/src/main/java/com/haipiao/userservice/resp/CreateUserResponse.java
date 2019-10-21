@@ -1,38 +1,9 @@
 package com.haipiao.userservice.resp;
 
 import com.google.gson.annotations.SerializedName;
+import com.haipiao.common.resp.AbstractResponse;
 
-public class CreateUserResponse {
-    @SerializedName("success")
-    private Boolean success;
-    @SerializedName("error")
-    private String error;
-    @SerializedName("data")
-    private Data data;
-
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public void setData(Data data) {
-        this.data = data;
-    }
+public class CreateUserResponse extends AbstractResponse<CreateUserResponse.Data> {
 
     public static class Data {
         @SerializedName("id")
@@ -46,4 +17,5 @@ public class CreateUserResponse {
             this.id = id;
         }
     }
+
 }
