@@ -1,0 +1,10 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    compile project(":common")
+    compile project(":persist")
+}
+
+bootJar {
+    mainClassName = 'com.haipiao.articleservice.application.Application'
+}

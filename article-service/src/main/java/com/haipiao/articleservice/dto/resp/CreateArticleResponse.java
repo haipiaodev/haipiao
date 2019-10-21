@@ -1,14 +1,14 @@
-package com.haipiao.userservice.dto;
+package com.haipiao.articleservice.dto.resp;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CreateUserResponse {
+public class CreateArticleResponse {
     @SerializedName("success")
     private Boolean success;
     @SerializedName("error")
     private String error;
     @SerializedName("data")
-    private Data data;
+    private CreateArticleResponse.Data data;
 
     public Boolean getSuccess() {
         return success;
@@ -26,11 +26,11 @@ public class CreateUserResponse {
         this.error = error;
     }
 
-    public Data getData() {
+    public CreateArticleResponse.Data getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(CreateArticleResponse.Data data) {
         this.data = data;
     }
 
@@ -47,5 +47,3 @@ public class CreateUserResponse {
         }
     }
 }
-
-

@@ -1,7 +1,6 @@
-package com.haipiao.userservice.dto;
+package com.haipiao.userservice.req;
 
 import com.google.gson.annotations.SerializedName;
-
 
 public class CreateUserRequest {
     @SerializedName("name")

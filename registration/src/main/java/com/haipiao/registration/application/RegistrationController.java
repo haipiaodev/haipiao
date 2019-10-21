@@ -51,6 +51,7 @@ public class RegistrationController {
         return verifySCHandler.handle(request);
     }
 
+    // TODO: are these generated? are they really useful?
     public void setVendSCHandler(VendSCHandler vendSCHandler) {
         this.vendSCHandler = vendSCHandler;
     }

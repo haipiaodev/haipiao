@@ -54,6 +54,9 @@ public class User extends BaseEntity {
     @Column(name = "profile_img_url")
     private String profileImgUrl;
 
+    @Column(name = "profile_img_url_small")
+    private String profileImgUrlSmall;
+
     private String organization;
 
     private String signature;
@@ -186,12 +189,16 @@ public class User extends BaseEntity {
         this.organization = organization;
     }
 
-    public String getProfileImgUrl() {
-        return profileImgUrl;
-    }
+    public String getProfileImgUrl() { return profileImgUrl; }
 
     public void setProfileImgUrl(String profileImgUrl) {
         this.profileImgUrl = profileImgUrl;
+    }
+
+    public String getProfileImgUrlSmall() { return profileImgUrlSmall; }
+
+    public void setProfileImgUrlSmall(String profileImgUrlSmall) {
+        this.profileImgUrlSmall = profileImgUrlSmall;
     }
 
     public String getSignature() {
@@ -237,24 +244,25 @@ public class User extends BaseEntity {
     @Override
     public String toString() {
         return "User{" +
-            "userId=" + userId +
-            ", passwordDigest=" + Arrays.toString(passwordDigest) +
-            ", userName='" + userName + '\'' +
-            ", email='" + email + '\'' +
-            ", phone='" + phone + '\'' +
-            ", tcAccepted=" + tcAccepted +
-            ", birthday=" + birthday +
-            ", gender=" + gender +
-            ", realName='" + realName + '\'' +
-            ", address1='" + address1 + '\'' +
-            ", address2='" + address2 + '\'' +
-            ", city='" + city + '\'' +
-            ", region='" + region + '\'' +
-            ", country='" + country + '\'' +
-            ", zipCode='" + zipCode + '\'' +
-            ", profileImgUrl='" + profileImgUrl + '\'' +
-            ", organization='" + organization + '\'' +
-            ", signature='" + signature + '\'' +
-            '}';
+                "userId=" + userId +
+                ", passwordDigest=" + Arrays.toString(passwordDigest) +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", tcAccepted=" + tcAccepted +
+                ", birthday=" + birthday +
+                ", gender=" + gender +
+                ", realName='" + realName + '\'' +
+                ", address1='" + address1 + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", city='" + city + '\'' +
+                ", region='" + region + '\'' +
+                ", country='" + country + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", profileImgUrl='" + profileImgUrl + '\'' +
+                ", profileImgUrlSmall='" + profileImgUrlSmall + '\'' +
+                ", organization='" + organization + '\'' +
+                ", signature='" + signature + '\'' +
+                '}';
     }
 }

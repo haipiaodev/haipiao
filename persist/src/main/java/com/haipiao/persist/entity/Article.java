@@ -1,5 +1,7 @@
 package com.haipiao.persist.entity;
 
+import com.haipiao.persist.enums.ArticleStatus;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,12 +22,20 @@ public class Article extends BaseEntity {
     @Column(name = "text_body")
     private String textBody;
 
+    // 1: images, 2: video
+    private int type;
+
     private int likes;
 
     private int collects;
 
+    private int shares;
+
     @Column(name = "user_id")
     private int authorId;
+
+    @Column(name = "status")
+    private ArticleStatus status;
 
     public int getArticleId() {
         return articleId;
@@ -51,6 +61,14 @@ public class Article extends BaseEntity {
         this.textBody = textBody;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public int getLikes() {
         return likes;
     }
@@ -67,6 +85,10 @@ public class Article extends BaseEntity {
         this.collects = collects;
     }
 
+    public int getShares() { return shares; }
+
+    public void setShares(int shares) { this.shares = shares; }
+
     public int getAuthorId() {
         return authorId;
     }
@@ -75,33 +97,47 @@ public class Article extends BaseEntity {
         this.authorId = authorId;
     }
 
+    public ArticleStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ArticleStatus status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Article article = (Article) o;
         return articleId == article.articleId &&
-            likes == article.likes &&
-            collects == article.collects &&
-            authorId == article.authorId &&
-            Objects.equals(title, article.title) &&
-            Objects.equals(textBody, article.textBody);
+                type == article.type &&
+                likes == article.likes &&
+                collects == article.collects &&
+                shares == article.shares &&
+                authorId == article.authorId &&
+                Objects.equals(title, article.title) &&
+                Objects.equals(textBody, article.textBody) &&
+                status == article.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(articleId, title, textBody, likes, collects, authorId);
+        return Objects.hash(articleId, title, textBody, type, likes, collects, shares, authorId, status);
     }
 
     @Override
     public String toString() {
         return "Article{" +
-            "articleId=" + articleId +
-            ", title='" + title + '\'' +
-            ", textBody='" + textBody + '\'' +
-            ", likes=" + likes +
-            ", collects=" + collects +
-            ", authorId=" + authorId +
-            '}';
+                "articleId=" + articleId +
+                ", title='" + title + '\'' +
+                ", textBody='" + textBody + '\'' +
+                ", type=" + type +
+                ", likes=" + likes +
+                ", collects=" + collects +
+                ", shares=" + shares +
+                ", authorId=" + authorId +
+                ", status=" + status +
+                '}';
     }
 }

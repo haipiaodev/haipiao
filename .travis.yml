@@ -11,6 +11,8 @@ install:
 
 before_script:
   - export PATH=$(pwd)/bin:$PATH
+  - docker pull redis:5.0.5
+  - docker pull haipiaodev/hp-postgres:0.0.2
   - docker-compose -f ./scripts/stack.yml up > /dev/null &
 
 script:

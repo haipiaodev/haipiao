@@ -25,6 +25,7 @@ create table hp_user
     country         varchar(32),
     zip_code        varchar(16),
     profile_img_url varchar(256),
+    profile_img_url_small varchar(256),
     organization    varchar(128),
     signature       varchar(256), -- 个性签名
     create_ts       timestamp,
@@ -62,10 +63,13 @@ create table article
     article_id serial,
     title      varchar(64),
     text_body  varchar(1024),
+    type       integer, -- 0: images, 1: video
     likes      integer,
     collects   integer,
+    shares     integer,
     -- location
     user_id    integer,
+    status     integer, -- 0: pending, 1: published, 2: inactive, 3 deleted
     create_ts  timestamp,
     update_ts  timestamp,
     constraint article_pk primary key (article_id),
@@ -78,6 +82,7 @@ create table image
     position_index      integer,
     article_id          integer,
     external_url        varchar(256),
+    external_url_large  varchar(256),
     external_url_medium varchar(256),
     external_url_small  varchar(256),
     hash_digest         bytea,
@@ -86,6 +91,19 @@ create table image
     update_ts           timestamp,
     constraint image_pk primary key (img_id),
     constraint image_fk1 foreign key (article_id) references article (article_id)
+);
+
+create table tag
+(
+    tag_id              serial,
+    img_id              serial,
+    x_position          integer,
+    y_position          integer,
+    text                varchar(16),
+    create_ts           timestamp,
+    update_ts           timestamp,
+    constraint tag_pk primary key (tag_id),
+    constraint tag_fk1 foreign key (img_id) references image (img_id)
 );
 
 create table topic
@@ -99,7 +117,7 @@ create table topic
 
 create table article_topic_relation
 (
-    id         UUID,
+    id         bigserial,
     article_id integer,
     topic_id   integer,
     create_ts  timestamp,

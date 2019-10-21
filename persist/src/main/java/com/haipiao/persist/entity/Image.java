@@ -27,11 +27,14 @@ public class Image extends BaseEntity {
     @Column(name = "external_url")
     private String externalUrl;
 
+    @Column(name = "external_url_large")
+    private String externalUrlLarge;
+
     @Column(name = "external_url_medium")
     private String externalUrlMedium;
 
     @Column(name = "external_url_small")
-    private String getExternalUrlSmall;
+    private String externalUrlSmall;
 
     @Column(name = "hash_digest")
     private byte[] hashDigest;
@@ -71,6 +74,14 @@ public class Image extends BaseEntity {
         this.externalUrl = externalUrl;
     }
 
+    public String getExternalUrlLarge() {
+        return externalUrlLarge;
+    }
+
+    public void setExternalUrlLarge(String externalUrlLarge) {
+        this.externalUrlLarge = externalUrlLarge;
+    }
+
     public String getExternalUrlMedium() {
         return externalUrlMedium;
     }
@@ -79,12 +90,12 @@ public class Image extends BaseEntity {
         this.externalUrlMedium = externalUrlMedium;
     }
 
-    public String getGetExternalUrlSmall() {
-        return getExternalUrlSmall;
+    public String getExternalUrlSmall() {
+        return externalUrlSmall;
     }
 
-    public void setGetExternalUrlSmall(String getExternalUrlSmall) {
-        this.getExternalUrlSmall = getExternalUrlSmall;
+    public void setExternalUrlSmall(String externalUrlSmall) {
+        this.externalUrlSmall = externalUrlSmall;
     }
 
     public byte[] getHashDigest() {
@@ -109,18 +120,19 @@ public class Image extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
         return imageId == image.imageId &&
-            positionIdx == image.positionIdx &&
-            articleId == image.articleId &&
-            Objects.equals(externalUrl, image.externalUrl) &&
-            Objects.equals(externalUrlMedium, image.externalUrlMedium) &&
-            Objects.equals(getExternalUrlSmall, image.getExternalUrlSmall) &&
-            Arrays.equals(hashDigest, image.hashDigest) &&
-            status == image.status;
+                positionIdx == image.positionIdx &&
+                articleId == image.articleId &&
+                Objects.equals(externalUrl, image.externalUrl) &&
+                Objects.equals(externalUrlLarge, image.externalUrlLarge) &&
+                Objects.equals(externalUrlMedium, image.externalUrlMedium) &&
+                Objects.equals(externalUrlSmall, image.externalUrlSmall) &&
+                Arrays.equals(hashDigest, image.hashDigest) &&
+                status == image.status;
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(imageId, positionIdx, articleId, externalUrl, externalUrlMedium, getExternalUrlSmall, status);
+        int result = Objects.hash(imageId, positionIdx, articleId, externalUrl, externalUrlLarge, externalUrlMedium, externalUrlSmall, status);
         result = 31 * result + Arrays.hashCode(hashDigest);
         return result;
     }
@@ -128,14 +140,15 @@ public class Image extends BaseEntity {
     @Override
     public String toString() {
         return "Image{" +
-            "imageId=" + imageId +
-            ", positionIdx=" + positionIdx +
-            ", articleId=" + articleId +
-            ", externalUrl=" + externalUrl +
-            ", externalUrlMedium=" + externalUrlMedium +
-            ", getExternalUrlSmall=" + getExternalUrlSmall +
-            ", hashDigest=" + Arrays.toString(hashDigest) +
-            ", status=" + status +
-            '}';
+                "imageId=" + imageId +
+                ", positionIdx=" + positionIdx +
+                ", articleId=" + articleId +
+                ", externalUrl='" + externalUrl + '\'' +
+                ", externalUrlLarge='" + externalUrlLarge + '\'' +
+                ", externalUrlMedium='" + externalUrlMedium + '\'' +
+                ", externalUrlSmall='" + externalUrlSmall + '\'' +
+                ", hashDigest=" + Arrays.toString(hashDigest) +
+                ", status=" + status +
+                '}';
     }
 }
