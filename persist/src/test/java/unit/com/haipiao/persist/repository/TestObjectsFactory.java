@@ -5,6 +5,7 @@ import com.haipiao.persist.entity.Comment;
 import com.haipiao.persist.entity.CommentReply;
 import com.haipiao.persist.entity.Image;
 import com.haipiao.persist.entity.User;
+import com.haipiao.persist.entity.UserSession;
 import com.haipiao.persist.enums.Gender;
 import com.haipiao.persist.enums.ImageStatus;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -78,6 +80,16 @@ public class TestObjectsFactory {
         commentReply.setTextBody("This is a reply");
         commentReply.setLikes(1000);
         return commentReply;
+    }
+
+    public UserSession createUserSession(int userId) {
+        byte[] token = new byte[32];
+        random.nextBytes(token);
+        UserSession session = new UserSession();
+        session.setUserId(userId);
+        session.setSelector(Arrays.copyOfRange(token, 0, 16));
+        session.setValidatorDigest(digest.digest(Arrays.copyOfRange(token, 16, 32)));
+        return session;
     }
 
     private static Date getCurrentDateNoTime() {

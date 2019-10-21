@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,9 +29,9 @@ public class RegistrationController {
     private VerifySCHandler verifySCHandler;
 
     @RequestMapping(value = "/security_code", method = RequestMethod.POST)
-    public VendSCResponse vendSecurityCode(@RequestParam("cell") String cell,
-                                           @RequestParam("country_code") String countryCode,
-                                           @RequestParam("type") String type) {
+    public ResponseEntity<VendSCResponse> vendSecurityCode(@RequestParam("cell") String cell,
+                                                           @RequestParam("country_code") String countryCode,
+                                                           @RequestParam("type") String type) {
         logger.info("cell={}, country_code={}, type={}", cell, countryCode, type);
         Preconditions.checkArgument(StringUtils.isNotEmpty(cell));
         Preconditions.checkArgument(StringUtils.isNotEmpty(countryCode));
@@ -43,7 +44,7 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/verification", method = RequestMethod.POST, consumes ="application/json", produces = "application/json")
-    public VerifySCResponse verifySecurityCode(@RequestBody VerifySCRequest request) {
+    public ResponseEntity<VerifySCResponse> verifySecurityCode(@RequestBody VerifySCRequest request) {
         Preconditions.checkArgument(StringUtils.isNotEmpty(request.getCell()));
         Preconditions.checkArgument(StringUtils.isNotEmpty(request.getSecurityCode()));
         Preconditions.checkArgument(StringUtils.isNotEmpty(request.getType()));

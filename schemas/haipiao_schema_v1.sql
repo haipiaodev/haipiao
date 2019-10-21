@@ -26,11 +26,25 @@ create table hp_user
     zip_code        varchar(16),
     profile_img_url varchar(256),
     organization    varchar(128),
-    signature       varchar(256),  -- 个性签名
+    signature       varchar(256), -- 个性签名
     create_ts       timestamp,
     update_ts       timestamp,
     constraint user_pk primary key (user_id)
 );
+
+create table user_session
+(
+    session_id serial,
+    user_id   integer,
+    selector  bytea,
+    validator_digest bytea,
+    create_ts timestamp,
+    update_ts timestamp,
+    constraint user_session_pk primary key (user_id),
+    constraint user_session_fk foreign key (user_id) references hp_user (user_id)
+);
+
+create index user_session_index0 ON user_session(selector);
 
 create table album
 (
@@ -76,10 +90,10 @@ create table image
 
 create table topic
 (
-    topic_id  serial,
-    topic_name  varchar(16),
-    create_ts timestamp,
-    update_ts timestamp,
+    topic_id   serial,
+    topic_name varchar(16),
+    create_ts  timestamp,
+    update_ts  timestamp,
     constraint topic_pk primary key (topic_id)
 );
 
@@ -95,28 +109,30 @@ create table article_topic_relation
     constraint article_topic_relation_fk2 foreign key (topic_id) references topic (topic_id)
 );
 
-create table comment (
+create table comment
+(
     comment_id serial,
-    text_body varchar(512),
-    likes integer,
+    text_body  varchar(512),
+    likes      integer,
     article_id integer,
-    author_id integer, -- user who writes the comment
-    create_ts timestamp,
-    update_ts timestamp,
+    author_id  integer, -- user who writes the comment
+    create_ts  timestamp,
+    update_ts  timestamp,
     constraint comment_pk primary key (comment_id),
     constraint comment_fk1 foreign key (article_id) references article (article_id),
     constraint comment_fk2 foreign key (author_id) references hp_user (user_id)
 );
 
-create table comment_reply (
-    reply_id serial,
+create table comment_reply
+(
+    reply_id   serial,
     article_id integer,
     comment_id integer,
-    text_body varchar(512),
-    likes integer,
+    text_body  varchar(512),
+    likes      integer,
     replier_id integer,
-    create_ts timestamp,
-    update_ts timestamp,
+    create_ts  timestamp,
+    update_ts  timestamp,
     constraint comment_reply_pk primary key (replier_id),
     constraint comment_reply_fk1 foreign key (article_id) references article (article_id),
     constraint comment_reply_fk2 foreign key (replier_id) references hp_user (user_id),

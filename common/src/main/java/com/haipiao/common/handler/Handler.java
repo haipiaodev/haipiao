@@ -1,7 +1,9 @@
 package com.haipiao.common.handler;
 
-public interface Handler<Req, Res> {
+import org.springframework.http.ResponseEntity;
 
-    Res handle(Req request);
+public interface Handler<ReqT, RespT> {
+
+    ResponseEntity<RespT> handle(ReqT request);
 
 }
