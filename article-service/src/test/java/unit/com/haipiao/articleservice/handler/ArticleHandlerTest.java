@@ -27,6 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+
+import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -36,8 +39,6 @@ public class ArticleHandlerTest {
 
     @Configuration
     static class Config {
-        @Autowired
-        private UserRepository userRepository;
 
         @Bean
         public CreateArticleHandler createArticleHandler(
@@ -151,9 +152,7 @@ public class ArticleHandlerTest {
         }
         Topic[] actualTopics = getResp.getBody().getData().getTopics();
         assertEquals(topics.length, actualTopics.length);
-        for (int i = 0; i < topics.length; i++) {
-            assertEquals(actualTopics[i].getName(), topics[i].getName());
-        }
+        assertEquals(Arrays.stream(actualTopics).map(Topic::getName).collect(toSet()), Arrays.stream(topics).map(Topic::getName).collect(toSet()));
         assertEquals(title, getResp.getBody().getData().getTitle());
         assertEquals(textBody, getResp.getBody().getData().getText());
         assertEquals(0, getResp.getBody().getData().getShares());
