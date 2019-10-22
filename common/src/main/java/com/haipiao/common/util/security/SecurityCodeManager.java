@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class SecurityCodeManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityCodeManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityCodeManager.class);
 
     private final Gson gson;
     private final RedisClientWrapper redisClient;
@@ -39,7 +39,7 @@ public class SecurityCodeManager {
         if (cacheVal != null) {
             SecurityCodeInfo scInfo = gson.fromJson(redisClient.get(cacheKey), SecurityCodeInfo.class);
             if (currTimeMills - scInfo.getVendedTimeEpoch() < config.getMinWait()) {
-                logger.debug("Not sending new security code. lastIssuedTime={}, currentTime={}",
+                LOGGER.debug("Not sending new security code. lastIssuedTime={}, currentTime={}",
                     scInfo.getVendedTimeEpoch(), currTimeMills);
                 return null;
             }

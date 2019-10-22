@@ -29,7 +29,7 @@ public class GetUserHandler extends AbstractHandler<GetUserRequest, GetUserRespo
         GetUserResponse resp = new GetUserResponse();
         GetUserResponse.Data data = new GetUserResponse.Data();
 
-        int userID = req.getId();
+        int userID = req.getId() != null ? req.getId() : req.getLoggedInUserId();
         Optional<User> optionalUser = userRepository.findById(userID);
         User user;
         if(optionalUser.isPresent()) {

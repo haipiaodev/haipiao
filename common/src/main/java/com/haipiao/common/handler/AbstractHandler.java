@@ -14,7 +14,7 @@ public abstract class AbstractHandler<ReqT extends AbstractRequest, RespT extend
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHandler.class);
 
-    private final SessionService sessionService;
+    protected final SessionService sessionService;
 
     protected AbstractHandler(SessionService sessionService) {
         this.sessionService = sessionService;

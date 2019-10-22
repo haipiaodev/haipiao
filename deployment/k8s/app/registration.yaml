@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: registration-service
+  labels:
+    app: registrationsvc
+spec:
+  type: NodePort
+  ports:
+    - port: 48376
+      targetPort: 8080
+  selector:
+    app: registrationsvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registrationsvc
+  labels:
+    app: registrationsvc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registrationsvc
+  template:
+    metadata:
+      labels:
+        app: registrationsvc
+    spec:
+      containers:
+        - name: registrationsvc
+          image: haipiaodev/registration:0.0.2
+          imagePullPolicy: Always
+          ports:
+            - name: registrationsvc
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 3
+          volumeMounts:
+            - name: properties-volume
+              mountPath: /config
+              readOnly: true
+      volumes:
+        - name: properties-volume
+          configMap:
+            name: application-properties

@@ -10,7 +10,9 @@ import com.haipiao.common.service.SessionService;
 import com.haipiao.common.util.session.SessionToken;
 import com.haipiao.common.util.session.SessionUtils;
 import com.haipiao.common.util.session.UserSessionInfo;
+import com.haipiao.persist.entity.User;
 import com.haipiao.persist.entity.UserSession;
+import com.haipiao.persist.repository.UserRepository;
 import com.haipiao.persist.repository.UserSessionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +32,16 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     private final UserSessionRepository userSessionRepository;
     @Autowired
+    private final UserRepository userRepository;
+    @Autowired
     private final Gson gson;
 
     public SessionServiceImpl(RedisClientWrapper redisClient,
                               UserSessionRepository userSessionRepository,
-                              Gson gson) {
+                              UserRepository userRepository, Gson gson) {
         this.redisClient = redisClient;
         this.userSessionRepository = userSessionRepository;
+        this.userRepository = userRepository;
         this.gson = gson;
     }
 
@@ -70,6 +75,58 @@ public class SessionServiceImpl implements SessionService {
         userSessionInfo.setUserId(persistedSession.getUserId());
         redisClient.set(sessionToken, gson.toJson(userSessionInfo));
         return userSessionInfo;
+    }
+
+    @Override
+    public SessionToken createTemporarySession() throws AppException {
+        SessionToken sessionToken = SessionUtils.generateSessionToken();
+        try {
+            redisClient.set(sessionToken.toString(), "{}"); // create
+            LOGGER.debug("Created temporary session. sessionToken={}", sessionToken.toString());
+        } catch (Exception ex) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR, ex);
+        }
+        return sessionToken;
+    }
+
+    @Override
+    public SessionToken createUserSession(String phone) throws AppException {
+        SessionToken sessionToken = SessionUtils.generateSessionToken();
+        // 1. find user id by user's phone number
+        User loggedInUser = userRepository.getUserByPhone(phone);
+        // TODO:add more fields 2. create user session in Redis
+        UserSessionInfo sessionInfo = new UserSessionInfo();
+        sessionInfo.setUserId(loggedInUser.getUserId());
+        // 3. persist user session in Database/Redis
+        try {
+            redisClient.set(sessionToken.toString(), gson.toJson(sessionInfo));
+            UserSession userSession = new UserSession();
+            userSession.setUserId(loggedInUser.getUserId());
+            userSession.setSelector(sessionToken.getSelector());
+            userSession.setValidatorDigest(SessionUtils.getValidatorDigest(sessionToken.getValidator()));
+            userSessionRepository.save(userSession);
+        } catch (Exception ex) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR, ex);
+        }
+        return sessionToken;
+    }
+
+    @Override
+    public SessionToken createUserSession(int id) throws AppException {
+        SessionToken sessionToken = SessionUtils.generateSessionToken();
+        UserSessionInfo sessionInfo = new UserSessionInfo();
+        sessionInfo.setUserId(id);
+        try {
+            redisClient.set(sessionToken.toString(), gson.toJson(sessionInfo));
+            UserSession userSession = new UserSession();
+            userSession.setUserId(id);
+            userSession.setSelector(sessionToken.getSelector());
+            userSession.setValidatorDigest(SessionUtils.getValidatorDigest(sessionToken.getValidator()));
+            userSessionRepository.save(userSession);
+        } catch (Exception ex) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR, ex);
+        }
+        return sessionToken;
     }
 
 }

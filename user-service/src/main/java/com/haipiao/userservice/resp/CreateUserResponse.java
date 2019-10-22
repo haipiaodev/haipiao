@@ -8,6 +8,8 @@ public class CreateUserResponse extends AbstractResponse<CreateUserResponse.Data
     public static class Data {
         @SerializedName("id")
         private int id;
+        @SerializedName("session-token")
+        private String sessionToken;
 
         public int getId() {
             return id;
@@ -15,6 +17,14 @@ public class CreateUserResponse extends AbstractResponse<CreateUserResponse.Data
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public String getSessionToken() {
+            return sessionToken;
+        }
+
+        public void setSessionToken(String sessionToken) {
+            this.sessionToken = sessionToken;
         }
     }
 

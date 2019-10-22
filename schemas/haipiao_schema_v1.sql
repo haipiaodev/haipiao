@@ -33,6 +33,8 @@ create table hp_user
     constraint user_pk primary key (user_id)
 );
 
+create index hp_user_index0 ON hp_user(phone);
+
 create table user_session
 (
     session_id serial,

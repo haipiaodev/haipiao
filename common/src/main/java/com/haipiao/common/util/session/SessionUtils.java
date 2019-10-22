@@ -33,7 +33,7 @@ public class SessionUtils {
         byte[] token = new byte[32];
         RANDOM.nextBytes(token);
         byte[] selector = Arrays.copyOfRange(token, 0, 16);
-        byte[] validator = Arrays.copyOfRange(token, 0, 16);
+        byte[] validator = Arrays.copyOfRange(token, 16, 32);
         SessionToken sessionToken = new SessionToken();
         sessionToken.setSelector(selector);
         sessionToken.setValidator(validator);

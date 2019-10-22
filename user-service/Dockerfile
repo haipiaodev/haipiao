@@ -1,7 +1,7 @@
-FROM openjdk:11-jdk-stretch
-VOLUME /tmp
-ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.haipiao.userservice.application.Application"]
+FROM openjdk:11
+
+COPY build/libs/user-service.jar /
+# no need to copy properties file, since it will be mounted by k8s.
+#COPY application.properties /
+WORKDIR /
+CMD ["java","-jar","user-service.jar"]

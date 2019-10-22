@@ -5,9 +5,9 @@ import com.haipiao.common.req.AbstractRequest;
 
 public class GetUserRequest extends AbstractRequest {
     @SerializedName("id")
-    private int id;
+    private Integer id;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

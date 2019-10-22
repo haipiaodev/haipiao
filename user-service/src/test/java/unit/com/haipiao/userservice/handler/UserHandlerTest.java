@@ -1,6 +1,9 @@
 package com.haipiao.userservice.handler;
 
-import com.haipiao.persist.config.PersistConfig;
+import com.google.gson.Gson;
+import com.haipiao.common.config.CommonConfig;
+import com.haipiao.common.redis.RedisClientWrapper;
+import com.haipiao.common.service.SessionService;
 import com.haipiao.persist.repository.UserRepository;
 import com.haipiao.userservice.req.CreateUserRequest;
 import com.haipiao.userservice.req.GetUserRequest;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -21,19 +25,23 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties
-@ContextConfiguration(classes = {UserHandlerTest.Config.class, PersistConfig.class})
+@ContextConfiguration(classes = {UserHandlerTest.Config.class, CommonConfig.class})
 public class UserHandlerTest {
 
     @Configuration
     static class Config {
         @Bean
-        public CreateUserHandler createUserHandler(@Autowired UserRepository userRepository) {
-            return new CreateUserHandler(userRepository);
+        public CreateUserHandler createUserHandler(@Autowired UserRepository userRepository,
+                                                   @Autowired SessionService sessionService,
+                                                   @Autowired Gson gson,
+                                                   @Autowired RedisClientWrapper redisClient) {
+            return new CreateUserHandler(sessionService, gson, redisClient, userRepository);
         }
 
         @Bean
-        public GetUserHandler getUserHandler(@Autowired UserRepository userRepository) {
-            return new GetUserHandler(userRepository);
+        public GetUserHandler getUserHandler(@Autowired UserRepository userRepository,
+                                             @Autowired SessionService sessionService) {
+            return new GetUserHandler(sessionService, userRepository);
         }
     }
 
@@ -55,15 +63,15 @@ public class UserHandlerTest {
         createReq.setName("Alice");
         createReq.setBirthday("31/12/1999");
         createReq.setGender("F");
-        CreateUserResponse createResp = createUserHandler.handle(createReq);
-        assertTrue(createResp.getSuccess());
-        assertNotNull(createResp.getData().getId());
+        ResponseEntity<CreateUserResponse> createResp = createUserHandler.handle(createReq);
+        assertTrue(createResp.getBody().isSuccess());
+        assertNotNull(createResp.getBody().getData().getId());
 
-        int id = createResp.getData().getId();
+        int id = createResp.getBody().getData().getId();
         GetUserRequest getReq = new GetUserRequest();
         getReq.setId(id);
-        GetUserResponse getResp = getUserHandler.handle(getReq);
-        assertTrue(getResp.getSuccess());
-        assertEquals(getResp.getData().getName(), "Alice");
+        ResponseEntity<GetUserResponse> getResp = getUserHandler.handle(getReq);
+        assertTrue(getResp.getBody().isSuccess());
+        assertEquals(getResp.getBody().getData().getName(), "Alice");
     }
 }

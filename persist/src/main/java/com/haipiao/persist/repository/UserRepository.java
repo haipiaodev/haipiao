@@ -4,4 +4,7 @@ import com.haipiao.persist.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
+
+    User getUserByPhone(String phone);
+
 }

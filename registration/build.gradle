@@ -6,5 +6,5 @@ dependencies {
 }
 
 bootJar {
-    mainClassName = 'com.haipiao.registartion.application.Application'
+    mainClassName = 'com.haipiao.registration.application.Application'
 }

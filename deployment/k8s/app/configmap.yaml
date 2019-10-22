@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-properties
+data:
+  application.properties: |
+    spring.main.banner-mode=off
+    redis.service=haipiao-redis.testk8s.svc:16379
+    redis.dbIndex=0
+    redis.defaultTTL=600
+    postgres.driverClassName=org.postgresql.Driver
+    postgres.url=jdbc:postgresql://haipiao-postgres.testk8s.svc:48375/postgres
+    postgres.username=postgres
+    postgres.password=example

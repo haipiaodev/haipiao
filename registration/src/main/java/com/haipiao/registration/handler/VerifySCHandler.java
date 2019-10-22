@@ -2,16 +2,15 @@ package com.haipiao.registration.handler;
 
 import com.haipiao.common.ErrorInfo;
 import com.haipiao.common.enums.SecurityCodeType;
+import com.haipiao.common.exception.AppException;
 import com.haipiao.common.handler.AbstractHandler;
 import com.haipiao.common.service.SessionService;
 import com.haipiao.common.util.security.SecurityCodeManager;
-import com.haipiao.common.util.session.SessionUtils;
+import com.haipiao.common.util.session.SessionToken;
 import com.haipiao.registration.req.VerifySCRequest;
 import com.haipiao.registration.resp.VerifySCResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 import static com.haipiao.common.enums.ErrorCode.FORBIDDEN;
 
@@ -28,7 +27,7 @@ public class VerifySCHandler extends AbstractHandler<VerifySCRequest, VerifySCRe
     }
 
     @Override
-    public VerifySCResponse execute(VerifySCRequest request) {
+    public VerifySCResponse execute(VerifySCRequest request) throws AppException {
         SecurityCodeType type = SecurityCodeType.findByCode(request.getType());
         boolean validated = securityCodeManager.validateSecurityCode(request.getCell(), request.getSecurityCode(), type);
         VerifySCResponse resp = new VerifySCResponse();
@@ -38,13 +37,16 @@ public class VerifySCHandler extends AbstractHandler<VerifySCRequest, VerifySCRe
             return resp;
         }
         resp.setSuccess(true);
+        SessionToken sessionToken;
         switch (type) {
             case REGISTRATION:
                 // TODO: to be implemented
-                resp.setData(new VerifySCResponse.Session(UUID.randomUUID().toString(), System.currentTimeMillis()));
+                sessionToken = sessionService.createTemporarySession();
+                resp.setData(new VerifySCResponse.Session(sessionToken.toString(), System.currentTimeMillis()));
                 break;
             case LOGIN:
-                resp.setData(new VerifySCResponse.Session(SessionUtils.generateSessionToken().toString(), System.currentTimeMillis()));
+                sessionToken = sessionService.createUserSession(request.getCell());
+                resp.setData(new VerifySCResponse.Session(sessionToken.toString(), System.currentTimeMillis()));
                 break;
             case CHANGE_PASSWORD:
                 // TODO: to be implemented
