@@ -124,7 +124,7 @@ cursor指向ResultSet里面的一个位置。假设其是一个int值，如果Re
 如果验证目的为`update_cell` (更新手机号)：
 - 服务器端需返回nonce, nonce在使用一次后即失效(`"type"="NONCE"`)
 
-**URL**: `/security-code/verification`
+**URL**: `/security-code/verify`
 **Method**: POST
 
 **Request body**:
