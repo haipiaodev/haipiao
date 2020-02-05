@@ -134,7 +134,7 @@ purpose可以是`login`或`update_cell`。
 {
   "country_code": "86",
   "cell": "12345678900",
-  "purpose": "login",
+  "type": "login",
   "code": "314489"
 }
 ```
