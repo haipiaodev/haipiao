@@ -1415,7 +1415,7 @@ tag中的x和y都是int，x表示的浮点数是0.001*x。
       {
         "cover_image_url": <string>,
         "id": <integer>,
-        "titile": <string>,
+        "title": <string>,
         "author": {
           "id": <integer>,
           "name": <string>,
@@ -1557,7 +1557,7 @@ Note: 如果被回复者是评论者, replyee_name和replyee_id会不存在。�
         "likes": <integer>,
         "liked": <boolean>,
         "content": <string>,
-        "replied_time": <string>
+        "replied_time": <long>
       }, 
       ...
     ]  
